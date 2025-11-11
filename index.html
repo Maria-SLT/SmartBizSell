@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Шаблон — 4‑колоночная сетка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <main id="app" class="wrap" aria-live="polite"></main>
+
+  <!-- HEADER -->
+  <template id="tpl-header_v1">
+    <section class="section header-v1">
+      <div class="grid4">
+        <div id="invopportunity" class="cell invopportunity">
+          <span class="tinycaps">{{invopportunity.text}}</span>
+        </div>
+        <div id="logo" class="cell logo"></div>
+        <div id="keydescription" class="cell keydescription">
+          <p class="desc">{{keydescription.text}}</p>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- OVERVIEW (with proposal) -->
+  <template id="tpl-overview_v2">
+    <section class="section overview-v2">
+      <div class="grid4 grid4-overview">
+        <!-- LEFT COLUMN -->
+        <div class="col-left">
+          <div id="generalinfo" class="cell generalinfo">
+            {{#generalinfo.hasItems}}
+              <ul class="bullets">
+                {{#generalinfo.items}}<li><span class="li-txt">{{.}}</span></li>{{/generalinfo.items}}
+              </ul>
+            {{/generalinfo.hasItems}}
+            {{^generalinfo.hasItems}}
+              <p>{{generalinfo.text}}</p>
+            {{/generalinfo.hasItems}}
+          </div>
+
+          <div id="highlights" class="cell highlights">
+            {{#highlights.items.length}}
+            <div class="hl-grid">
+              {{#highlights.items}}
+              <div class="hl-card">
+                <div class="hl-value">{{value}}</div>
+                <div class="hl-caption">{{caption}}</div>
+              </div>
+              {{/highlights.items}}
+            </div>
+            {{/highlights.items.length}}
+          </div>
+
+          <div id="proposal" class="cell proposal">
+            <p>{{proposal.text}}</p>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="col-right">
+          <div id="financials" class="cell financials"></div>
+
+          <div id="illustrations" class="cell illustrations">
+            {{#illustrations.hasAny}}
+              {{#illustrations.countIsOne}}
+                <div class="il-one">
+                  <img src="{{illustrations.items.0}}" alt="Иллюстрация" loading="lazy">
+                </div>
+              {{/illustrations.countIsOne}}
+
+              {{#illustrations.countIsTwo}}
+                <div class="il-grid two il-show-grid-desktop">
+                  {{#illustrations.items}}
+                    <div class="il-cell"><img src="{{.}}" alt="Иллюстрация" loading="lazy"></div>
+                  {{/illustrations.items}}
+                </div>
+                <div class="il-slider-wrap il-show-slider-mobile">
+                  <button class="il-nav il-prev" aria-label="Назад" type="button">‹</button>
+                  <div class="il-slider" tabindex="0" aria-label="Галерея">
+                    {{#illustrations.items}}
+                      <div class="il-slide"><img src="{{.}}" alt="Иллюстрация" loading="lazy"></div>
+                    {{/illustrations.items}}
+                  </div>
+                  <button class="il-nav il-next" aria-label="Вперёд" type="button">›</button>
+                </div>
+              {{/illustrations.countIsTwo}}
+
+              {{#illustrations.countIsMore}}
+                <div class="il-slider-wrap">
+                  <button class="il-nav il-prev" aria-label="Назад" type="button">‹</button>
+                  <div class="il-slider" tabindex="0" aria-label="Галерея">
+                    {{#illustrations.items}}
+                      <div class="il-slide"><img src="{{.}}" alt="Иллюстрация" loading="lazy"></div>
+                    {{/illustrations.items}}
+                  </div>
+                  <button class="il-nav il-next" aria-label="Вперёд" type="button">›</button>
+                </div>
+              {{/illustrations.countIsMore}}
+            {{/illustrations.hasAny}}
+            <!-- if hasAny == false => render nothing -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- BADGE footer -->
+  <template id="tpl-badge_v1">
+    <section class="section badge-v1">
+      <div class="grid4">
+        <div id="badge" class="cell badge-cell">
+          <span class="tinycaps">Создано с помощью SmartBizSell</span>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <script src="assets/slider.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+  <script>
+    const T = (id)=>document.getElementById(id).innerHTML;
+    const registry = {
+      header_v1: T('tpl-header_v1'),
+      overview_v2: T('tpl-overview_v2'),
+      badge_v1: T('tpl-badge_v1')
+    };
+
+    function normalizeParagraphs(s){
+      if(typeof s !== 'string') return '';
+      s = s.replace(/\\n/g, '\n').replace(/\r\n/g, '\n');
+      return s;
+    }
+
+    function toItems(text){
+      const t = normalizeParagraphs(text);
+      const parts = t.split(/\n\s*\n+/).map(x=>x.trim()).filter(Boolean);
+      return parts;
+    }
+
+    function preprocess(block){
+      if(block.type === 'overview_v2'){
+        const gi = block.generalinfo || {};
+        const items = Array.isArray(gi.items) && gi.items.length ? gi.items.slice(0,3) : toItems(gi.text);
+        const hasItems = items.length > 1;
+        block.generalinfo = hasItems ? { items, hasItems: true } : { text: normalizeParagraphs(gi.text || (items[0] || '')), hasItems: false };
+
+        const hl = block.highlights || {};
+        if(!Array.isArray(hl.items)) hl.items = [];
+        block.highlights = hl;
+
+        const pr = block.proposal || {};
+        pr.text = normalizeParagraphs(pr.text || '');
+        block.proposal = pr;
+
+        const il = block.illustrations || {};
+        const arr = Array.isArray(il.items) ? il.items : [];
+        const count = arr.length;
+        const hasAny = count > 0;
+        block.illustrations = {
+          items: arr,
+          count,
+          hasAny,
+          countIsOne: count === 1,
+          countIsTwo: count === 2,
+          countIsMore: count > 2
+        };
+      }
+      return block;
+    }
+
+    function render(type, data) {
+      const tpl = registry[type] || '';
+      return Mustache.render(tpl, data || {});
+    }
+
+    async function main(){
+      const res = await fetch('data/page.json', { cache: 'no-store' });
+      const page = await res.json();
+      const html = page.blocks.map(b => render(b.type, preprocess(b))).join('') + render('badge_v1', {});
+      document.getElementById('app').innerHTML = html;
+      initSliders();
+    }
+
+    main().catch(e => {
+      console.error(e);
+      document.getElementById('app').innerHTML = '<p role="alert">Ошибка загрузки данных</p>';
+    });
+  </script>
+</body>
+</html>

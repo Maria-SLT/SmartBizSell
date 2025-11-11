@@ -1,0 +1,249 @@
+/* ===== v24 — styles.css (updated) ===== */
+
+/* Design tokens */
+:root{
+  --margin: 80px;
+  --gutter: 40px;
+  --cols: 4;
+  --vspace: 40px;
+  --line:#e5e7eb;
+  --gray:#f3f4f6;
+  --blue:#0a2a6a;
+  --aqua:#ADF2F6;
+  --slider-gap: 20px;
+  --slide-h-desktop: 220px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font:16px/1.6 'Roboto Flex', system-ui, Segoe UI, Roboto, Arial;
+  color:#111;
+  background:#FFFEFE; /* фон страницы */
+}
+
+/* Global layout */
+.wrap{padding-left:var(--margin);padding-right:var(--margin)}
+.section{padding:0 0 var(--vspace)}
+.section:first-child{padding-top:0;}
+
+.grid4{
+  display:grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  column-gap: var(--gutter);
+  row-gap: var(--vspace);
+}
+
+.cell{min-height:10px}
+
+/* Remove all borders & radii (override) */
+img,.cell,.il-cell img,.il-one img,.il-placeholder,
+.header-v1 .logo,.overview-v2 .financials,.il-nav,.il-slide img{
+  border:none !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+
+/* ===== Header ===== */
+.header-v1 .invopportunity{ grid-column: 1 / span 1; grid-row: 1; margin-top:20px; } /* отступ сверху 20px */
+.header-v1 .grid4{ row-gap:10px; } /* между invopportunity и logo — 10px */
+
+.tinycaps{letter-spacing:.12em;text-transform:uppercase}
+.header-v1 .invopportunity .tinycaps{ font-size:10px; color:#BABABA; } /* параметры invopportunity */
+
+.header-v1 .logo{
+  grid-column: 1 / span 1; grid-row: 2;
+  background:var(--gray); height:100px;
+  /* border/rounding уже сняты глобально */
+}
+
+.header-v1 .keydescription{
+  grid-column: 2 / span 3; grid-row: 2;
+  display:flex; align-items:center; /* вертикальное выравнивание к блоку logo */
+}
+.header-v1 .keydescription .desc{
+  margin:0;
+  font-family:'Roboto Flex', system-ui;
+  font-weight:500; /* Medium */
+  font-size:20px;
+  line-height:24px;
+  color:#081E73;
+  display:block; /* убрать clamp из старой версии */
+  -webkit-line-clamp:unset; -webkit-box-orient:unset; overflow:visible;
+}
+
+/* ===== Overview (v2) ===== */
+.col-left{ grid-column: 1 / span 2; display:flex; flex-direction:column; gap:40px; }
+.col-right{ grid-column: 3 / span 2; display:flex; flex-direction:column; gap:40px; }
+
+.overview-v2 .financials{
+  background: var(--gray);
+  height: 250px;
+}
+
+/* Highlights */
+.hl-grid{ display:grid; grid-template-columns: repeat(2, 1fr); column-gap: var(--gutter); row-gap: 20px; }
+.hl-card{}
+.hl-value{ font-weight: 600; font-size: 28px; color: var(--blue); line-height: 1.1; }
+.hl-caption{ font-size: 12px; color: #606060; line-height: 1; }
+
+/* ===== Generalinfo typography ===== */
+#generalinfo, .generalinfo{ 
+  font-family:'Roboto Flex', system-ui;
+  font-weight:400; /* Regular */
+  font-size:16px;
+  line-height:19px;
+}
+#generalinfo p, .generalinfo p{ margin:0; }
+#generalinfo p + p, .generalinfo p + p{ margin-top:19px; } /* между абзацами 1 строка */
+
+.bullets{ margin:0; padding-left: 20px; list-style: disc; }
+.bullets li{ margin:0; }
+.bullets li + li{ margin-top:19px; }
+.li-txt{ display:block; line-height:19px; }
+
+/* ===== Proposal ===== */
+.proposal p{
+  margin:0;
+  font-weight:500;
+  font-size:20px;
+  line-height:1.1;
+  color:#081E73
+}
+.proposal{ width:100%; flex:0 0 auto; }
+
+/* ===== Illustrations ===== */
+.il-one img{
+  width:100%;
+  height: var(--slide-h-desktop);
+  object-fit: cover;
+}
+
+.il-grid.two{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.il-cell img{ width:100%; height:var(--slide-h-desktop); object-fit:cover; }
+
+/* Slider */
+.il-slider-wrap{ position:relative; }
+.il-slider{
+  display:flex;
+  overflow-x:auto;
+  gap:var(--slider-gap);
+  scroll-snap-type:x mandatory;
+  padding-bottom:6px;
+  -webkit-overflow-scrolling:touch;
+}
+.il-slider::-webkit-scrollbar{ height:6px }
+.il-slide{ flex:0 0 calc((100% - var(--slider-gap)) / 2); scroll-snap-align:start; }
+.il-slide img{ width:100%; height:var(--slide-h-desktop); object-fit:cover; }
+
+/* --- корректировка кнопок слайдера --- */
+.il-nav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:36px;
+  height:36px;
+  border:1px solid #D0D0D0;
+  background:#FFFFFF;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  color:#333;
+  cursor:pointer;
+  border-radius:50%;
+}
+
+.il-prev{ left:-20px; }
+.il-next{ right:-20px; }
+
+.il-nav:hover{
+  background:#F2F2F2;
+}
+
+.il-nav:disabled{
+  opacity:0.4;
+  cursor:not-allowed;
+}
+
+/* Two-images helpers */
+.il-show-grid-desktop{ display:block; }
+.il-show-slider-mobile{ display:none; }
+
+/* ===== Badge ===== */
+.badge-v1 .badge-cell{ grid-column: 1 / span 2; }
+.badge-cell .tinycaps{ font-size:10px; color:#BABABA; display:inline-block; }
+
+/* ===== Mobile ===== */
+@media (max-width: 960px){
+  .wrap{padding-left:20px;padding-right:20px}
+  .grid4{grid-template-columns:1fr; column-gap:20px; row-gap:var(--vspace)}
+
+  .grid4-overview{ display:flex; flex-direction:column; gap:20px; }
+  .col-left, .col-right{ display: contents; }
+
+  /* Mobile stacking */
+  #generalinfo{ order:1 }
+  #highlights{ order:2 }
+  #financials{ order:3 }
+  #proposal{ order:4 }
+  #illustrations{ order:5 }
+
+  .hl-grid{ grid-template-columns: 1fr; column-gap: 20px; }
+
+  .il-one img{ height:auto; }
+  .il-slide{ flex: 0 0 70%; } /* ширина 70% */
+  .il-slide img{ height:auto; }
+
+  /* only slider for 2 images on mobile */
+  .il-show-grid-desktop{ display:none !important; }
+  .il-show-slider-mobile{ display:block !important; }
+
+  /* Header на мобайле */
+  .header-v1 .grid4{
+  grid-template-columns: 1fr !important;
+  }
+
+  .header-v1 .invopportunity,
+  .header-v1 .keydescription{
+  grid-column: 1 / -1 !important;  /* занять всю строку */
+  grid-row: auto !important;       /* сбросить фиксированные ряды */
+  width: 100%;
+  }
+  .header-v1 .logo{
+  grid-column: 1 / -1 !important;
+  grid-row: auto !important;
+  width: 200px;
+  height: 100px;
+  }
+}
+
+/* ===== Print (A4) from v24 remains ===== */
+@media print{
+  @page{ size: A4 portrait; margin:12mm; }
+  body{ -webkit-print-color-adjust: exact; print-color-adjust: exact; color:#000; }
+  :root{ --margin:0; --gutter:8mm; --vspace:8mm; --slide-h-desktop:45mm; }
+  body{ font-size:11pt; line-height:1.35; }
+  .tinycaps{ font-size:9pt; letter-spacing:.12em; }
+  .proposal p{ font-size:12pt; line-height:1.35; }
+
+  .wrap{ padding:0; }
+  .section{ padding:0 0 var(--vspace); }
+  .grid4{ column-gap:var(--gutter); row-gap:var(--vspace); }
+  .col-left, .col-right{ gap:8mm; }
+
+  .header-v1 .logo{ height:22mm; }
+  .desc{ -webkit-line-clamp:unset; overflow:visible; }
+
+  .il-nav{ display:none !important; }
+  .overview-v2 .financials{ height:30mm; }
+
+  .il-slider{ display:grid !important; grid-template-columns: repeat(2, 1fr); gap:6mm; overflow:visible; }
+  .il-slide{ flex:0 0 auto; scroll-snap-align:unset; }
+  .il-slide img, .il-cell img, .il-one img{ height:var(--slide-h-desktop) !important; }
+
+  .section, .cell, .hl-grid, .il-grid, .il-slider{ break-inside:avoid; page-break-inside:avoid; }
+
+  .badge-v1{ margin-top:6mm; }
+}
