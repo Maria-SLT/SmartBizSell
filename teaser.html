@@ -180,61 +180,31 @@
     }
 
 async function main(){
-  // Диагностика адреса
-  const href = String(window.location.href || '');
-  const search = String(window.location.search || '');
-  console.log('[teaser/dbg] href =', href);
-  console.log('[teaser/dbg] search =', search);
-
-  // 1) Пытаемся стандартным способом
-  let company = new URLSearchParams(search).get('company');
-
-  // 2) Если не вышло — вытаскиваем из полного href (на случай нестандартного окружения)
-  if (!company) {
-    const m = href.match(/[?&]company=([^&#]+)/i);
-    if (m) company = decodeURIComponent(m[1]);
-  }
-
-  // 3) Если вдруг параметр попал в hash (например, после #)
-  if (!company && window.location.hash) {
-    const m2 = window.location.hash.match(/[?&]company=([^&#]+)/i);
-    if (m2) company = decodeURIComponent(m2[1]);
-  }
-
-  // 4) Дефолт
-  if (!company) company = 'pins';
-
-  // Нормализация
+  // читаем параметр компании
+  const params = new URLSearchParams(window.location.search);
+  let company = params.get('company') || 'pins';
   company = String(company).toLowerCase().replace(/[^a-z0-9_-]/g, '');
 
-  // Абсолютный путь — важен для dev-сервера
-  const dataUrl = `/data/companies/${company}.json?ts=${Date.now()}`;
-  console.log('[teaser/dbg] company =', company, '→', dataUrl);
+  // ВАЖНО: формируем URL к JSON ОТНОСИТЕЛЬНО текущей страницы
+  // это работает и на localhost:5173, и на GitHub Pages (USERNAME.github.io/REPO/)
+  const dataUrl = new URL(`data/companies/${company}.json?ts=${Date.now()}`, document.baseURI).href;
+  console.log('[teaser] company =', company, '→', dataUrl);
 
-  // Загрузка
   const res = await fetch(dataUrl, { cache: 'no-store' });
-  console.log('[teaser/dbg] fetch status:', res.status, res.statusText);
   if (!res.ok) {
-    document.getElementById('app').innerHTML = '<p role="alert">Не удалось загрузить данные компании</p>';
-    return;
+    throw new Error(`Не удалось загрузить данные: ${res.status} ${res.statusText}`);
   }
-
   const page = await res.json();
-  console.log('[teaser/dbg] blocks length:', Array.isArray(page?.blocks) ? page.blocks.length : 'no blocks');
 
-  // === ваш текущий рендер ===
+  // дальше ваш текущий рендер
   const html = page.blocks.map(b => render(b.type, preprocess(b))).join('') + render('badge_v1', {});
   document.getElementById('app').innerHTML = html;
   initSliders();
 }
 
-// Подстрахуемся на случай ошибок
-window.addEventListener('error', e => console.error('[teaser/dbg] window error:', e.message));
-window.addEventListener('unhandledrejection', e => console.error('[teaser/dbg] unhandledrejection:', e.reason));
-
 main().catch(err => {
-  console.error('[teaser/dbg] main() error:', err);
-  document.getElementById('app').innerHTML = '<p role="alert">Неожиданная ошибка при инициализации</p>';
+  console.error(err);
+  document.getElementById('app').innerHTML = '<p role="alert">Ошибка загрузки данных компании</p>';
 });
 </script>
 
