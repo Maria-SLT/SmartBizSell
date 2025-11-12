@@ -187,7 +187,7 @@ async function main(){
 
   // ВАЖНО: формируем URL к JSON ОТНОСИТЕЛЬНО текущей страницы
   // это работает и на localhost:5173, и на GitHub Pages (USERNAME.github.io/REPO/)
-  const dataUrl = new URL(`data/companies/${company}.json?ts=${Date.now()}`, document.baseURI).href;
+  const dataUrl = `./data/companies/${company}.json?ts=${Date.now()}`;
   console.log('[teaser] company =', company, '→', dataUrl);
 
   const res = await fetch(dataUrl, { cache: 'no-store' });
