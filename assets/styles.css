@@ -1,0 +1,526 @@
+:root{
+  --page-margin: 60px;
+  --radius: 15px;
+  --color-light-gray: #E9EBF5;
+  --color-gray: #CBCDD8;
+  --color-dark-gray: #54555C;
+  --color-blue: #081E73;
+}
+
+/* базовые настройки */
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:'Roboto Flex', system-ui, sans-serif;
+  background:#ffffff;
+  color:#000000;
+}
+
+.page{
+  margin:60px;
+}
+
+/* TOPLINE */
+
+.topline{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  margin-top:60px;
+  gap:10px;
+}
+
+/* верхняя строка (инструменты + КОНТАКТЫ) */
+.topline-tools{
+  width:100%;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:30px;
+}
+
+/* блок иконок инструментов */
+.tools{
+  display:flex;
+  gap:10px;
+  flex-shrink:0;
+}
+
+/* кнопки-инструменты: фоновые иконки */
+.tool-btn{
+  width:30px;
+  height:30px;
+  background-color:transparent;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:20px 20px;
+  border:none;
+  border-radius:0;
+  flex-shrink:0;
+  cursor:pointer;
+}
+
+/* Пример назначения иконок (нужны файлы в assets/icons/) */
+.tools .tool-btn:nth-child(1){
+  background-image:url("icons/tool-compare.svg");
+}
+
+.tools .tool-btn:nth-child(2){
+  background-image:url("icons/tool-print.svg");
+}
+
+.tools .tool-btn:nth-child(3){
+  background-image:url("icons/tool-share.svg");
+}
+
+/* кнопка КОНТАКТЫ */
+.contact-btn{
+  height:30px;
+  padding:0 20px;
+  background:#007AFF;
+  color:white;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  border-radius:var(--radius);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* нижняя строка — INVOPPORTUNITY */
+
+.invopportunity{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  color:var(--color-gray);
+}
+
+/* HEADER */
+
+.header-block{
+  display:flex;
+  gap:20px;
+  margin-top:10px;
+}
+
+.logo-block{
+  flex:0 0 20%;
+  height:100px;
+  background:var(--color-light-gray);
+  border-radius:var(--radius);
+}
+
+.keydescription{
+  display:flex;
+  align-items:center;
+  flex:1;
+}
+
+.keydescription p{
+  margin:0;
+  font-size:24px;
+  font-weight:500;
+  line-height:28px;
+  color:var(--color-blue);
+}
+
+/* TAGS */
+
+.tags{
+  margin-top:30px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.tag-pill{
+  height:30px;
+  padding:0 20px;
+  background:white;
+  border:1px solid var(--color-light-gray);
+  border-radius:var(--radius);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  color:var(--color-gray);
+  display:flex;
+  align-items:center;
+}
+
+/* TITLE SUMMARY */
+
+.titlesummary{
+  margin-top:30px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.titlesummary-icon{
+  width:40px;
+  height:40px;
+  border-radius:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.titlesummary-title{
+  font-size:24px;
+  font-weight:700;
+  margin:0;
+}
+
+/* Общий стиль inline SVG иконок */
+
+.icon-24{
+  width:24px;
+  height:24px;
+  display:block;
+  fill:var(--color-blue);
+}
+
+/* SUMMARY */
+
+.summary{
+  margin-top:20px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.summary-item{
+  min-height:90px;
+  padding:12px 16px;
+  background:var(--color-light-gray);
+  border-radius:var(--radius);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.summary-descriptor{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  color:var(--color-dark-gray);
+  margin-bottom:10px;
+}
+
+.summary-value{
+  font-size:30px;
+  font-weight:500;
+  color:var(--color-blue);
+}
+
+/* DIVIDER */
+
+.divider{
+  margin:40px 0;
+  border:none;
+  border-top:1px solid var(--color-gray);
+}
+
+/* GENERALINFO + VIDEO */
+
+.generalinfo-block{
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+  flex-wrap:nowrap;
+}
+
+.generalinfo{
+  flex:1 1 0;
+  min-width:0;
+  font-size:16px;
+  color:#000;
+}
+
+.generalinfo p{
+  margin:0;
+}
+
+.generalinfo p + p{
+  margin-top:8px;
+}
+
+.video-wrapper{
+  width:356px;
+  height:200px;
+  flex:0 0 auto;
+  display:none;
+}
+
+.video-wrapper iframe{
+  width:100%;
+  height:100%;
+  border-radius:var(--radius);
+}
+
+/* перенос видео под текст */
+
+@media(max-width:712px){
+  .generalinfo-block{
+    flex-direction:column;
+  }
+  .video-wrapper{
+    width:356px;
+    height:200px;
+    margin-top:20px;
+  }
+}
+
+/* HIGHLIGHTS */
+
+.highlights{
+  margin-top:40px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:40px;
+  white-space: pre-line; /* НОВОЕ СВОЙСТВО */
+}
+
+.highlight-item{
+  display:flex;
+  gap:10px;
+}
+
+.highlight-icon{
+  color:#081E73;
+  width:40px;
+  height:40px;
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+
+.highlight-text{
+  max-width:20vw;
+}
+
+.highlight-value{
+  font-size:24px;
+  font-weight:500;
+  color:var(--color-blue);
+  margin-bottom:5px;
+}
+
+.highlight-desc{
+  font-size:12px;
+  color:var(--color-gray);
+  line-height:normal;
+  letter-spacing:0.6px;
+}
+
+/* FINANCIALS */
+
+.financials{
+  margin-top:40px;
+  width:100%;
+  height:250px;
+  background:#ffffff;
+  border-radius:var(--radius);
+  border:1px solid var(--color-light-gray);
+  box-shadow:0 0 10px rgba(203,205,216,0.5);
+  padding:20px;
+}
+
+.financials-title{
+  margin:0;
+  font-size:16px;
+  font-weight:500;
+}
+
+/* ILLUSTRATIONS */
+
+.illustrations{
+  margin-top:40px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.illustration-item{
+  width:200px;
+  height:200px;
+  border-radius:var(--radius);
+  overflow:hidden;
+  background:var(--color-light-gray);
+}
+
+.illustration-item img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.illustrations-divider{
+  width:100%;
+  border:none;
+  border-top:1px solid var(--color-gray);
+}
+
+/* ADVANTAGES / RISKS / CONTACTS */
+
+.section-header{
+  margin-top:40px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.section-icon{
+  width:40px;
+  height:40px;
+  border-radius:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.section-title{
+  margin:0;
+  font-size:24px;
+  font-weight:700;
+}
+
+/* pill lists */
+
+.pill-list{
+  margin-top:20px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  list-style:none;          /* убрать буллиты */
+  padding-left:0;           /* убрать левый отступ */
+  margin-left:0;
+}
+
+.pill-item{
+  width:100%;
+  border-radius:var(--radius);
+  padding:12px 16px;
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  font-size:16px;
+  list-style:none;          /* убрать буллиты */
+}
+
+.pill-adv{
+  background:#EDF7FF;
+}
+
+.pill-risk{
+  background:#FFEBEA;
+}
+
+.pill-icon{
+  flex:0 0 auto;
+  font-size:16px;
+  line-height:1;
+  margin-top:2px;
+  border-radius:0;
+}
+
+.pill-text{
+  flex:1 1 auto;
+}
+
+/* PROPOSAL */
+
+.proposal{
+  margin-top:40px;
+}
+
+.proposal p{
+  margin:0;
+  font-size:20px;
+  font-weight:500;
+  line-height:22px;
+  color:var(--color-blue);
+}
+
+/* CONTACTS */
+
+.contacts-section{
+  margin-top:40px;
+}
+
+.contacts-box{
+  margin-top:20px;
+  padding:20px;
+  border-radius:var(--radius);
+  background:var(--color-light-gray);
+}
+
+.contact-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:8px;
+}
+
+.contact-label{
+  font-weight:500;
+}
+
+.contact-link{
+  color:var(--color-blue);
+  text-decoration:none;
+}
+
+/* ACTION BUTTONS */
+
+.actions{
+  margin-top:40px;
+  display:flex;
+  justify-content:flex-end;
+  gap:20px;
+}
+
+.btn{
+  min-height:36px;
+  padding:0 20px;
+  border-radius:var(--radius);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  cursor:pointer;
+  border:1px solid transparent;
+}
+
+.btn-secondary{
+  background:#ffffff;
+  border-color:var(--color-gray);
+  color:var(--color-gray);
+}
+
+.btn-primary{
+  background:#007AFF;
+  color:#ffffff;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+  .page{
+    margin:20px;
+  }
+  .highlight-text{
+    max-width:100%;
+  }
+}

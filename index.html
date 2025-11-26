@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Каталог компаний</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    /* Небольшая надстройка над существующими стилями */
+    .catalog-page{
+      margin:60px;
+      font-family:'Roboto Flex', system-ui, sans-serif;
+    }
+
+    .catalog-title{
+      font-size:28px;
+      font-weight:600;
+      margin:40px 0 20px;
+    }
+
+    .catalog-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+      gap:20px;
+    }
+
+    .company-card{
+      display:block;
+      padding:20px;
+      background:#FFFFFF;
+      border-radius:15px;
+      border:1px solid #E9EBF5;
+      text-decoration:none;
+      color:#000000;
+      transition:box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .company-card:hover{
+      box-shadow:0 6px 16px rgba(0,0,0,0.08);
+      transform:translateY(-2px);
+    }
+
+    .company-name{
+      font-size:18px;
+      font-weight:600;
+      margin:0 0 8px;
+      color:#081E73;
+    }
+
+    .company-meta{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:0.6px;
+      color:#54555C;
+      margin-bottom:10px;
+    }
+
+    .company-summary{
+      font-size:14px;
+      line-height:1.4;
+      color:#000000;
+      margin:0;
+    }
+  </style>
+</head>
+<body>
+  <main class="catalog-page">
+    <h1 class="catalog-title">Инвестиционный каталог</h1>
+    <section id="catalog-grid" class="catalog-grid"></section>
+  </main>
+
+  <script>
+    async function loadCatalog(){
+      try{
+        const res = await fetch('data/catalog.json', { cache: 'no-store' });
+        if(!res.ok){
+          console.error('Ошибка загрузки catalog.json', res.status, res.statusText);
+          return;
+        }
+
+        const companies = await res.json();
+        const grid = document.getElementById('catalog-grid');
+        grid.innerHTML = '';
+
+        companies.forEach(company => {
+          const card = document.createElement('a');
+          card.className = 'company-card';
+          card.href = `teaser.html?company=${encodeURIComponent(company.slug)}`;
+
+          const name = document.createElement('h2');
+          name.className = 'company-name';
+          name.textContent = company.name;
+
+          const meta = document.createElement('div');
+          meta.className = 'company-meta';
+          // например: "Москва · FMCG"
+          meta.textContent = [company.city, company.industry].filter(Boolean).join(' · ');
+
+          const summary = document.createElement('p');
+          summary.className = 'company-summary';
+          summary.textContent = company.summary || '';
+
+          card.appendChild(name);
+          if(meta.textContent){
+            card.appendChild(meta);
+          }
+          card.appendChild(summary);
+
+          grid.appendChild(card);
+        });
+      }catch(err){
+        console.error('Ошибка инициализации каталога', err);
+      }
+    }
+
+    loadCatalog();
+  </script>
+</body>
+</html>
